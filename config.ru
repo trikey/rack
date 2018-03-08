@@ -1,5 +1,6 @@
-require_relative 'middleware/time_format'
+require_relative 'middleware/not_found'
+require_relative 'lib/time_format'
 require_relative 'app'
 
-use TimeFormat
+use NotFound
 run App.new

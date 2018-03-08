@@ -1,19 +1,15 @@
 class App
   def call(env)
-    [status, headers, body]
-  end
-
-  private
-
-  def status
-    200
-  end
-
-  def headers
-    { 'Content-Type' => 'text/plain' }
-  end
-
-  def body
-    ["#{Time.now}\n"]
+    response = Rack::Response.new
+    response['Content-Type'] = 'text/plain'
+    req = Rack::Request.new(env)
+    time_format = TimeFormat.new(req.params['format'])
+    begin
+      response.body = [time_format.formatted_date]
+    rescue StandardError => e
+      response.body = [e.message]
+      response.status = 400
+    end
+    response.finish
   end
 end
